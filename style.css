@@ -1,0 +1,427 @@
+/* ===========================
+   ENGLISHFORGE V1
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+
+    background:linear-gradient(135deg,#87CEEB,#DDF4FF);
+
+    min-height:100vh;
+
+    padding:18px;
+
+    color:#1f2937;
+
+}
+
+/* ===========================
+   TOP BAR
+=========================== */
+
+.top-bar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+}
+
+.app-name{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    color:#0f3d5e;
+
+}
+
+.controls{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+#counter{
+
+    background:white;
+
+    padding:8px 18px;
+
+    border-radius:12px;
+
+    font-weight:bold;
+
+    font-size:17px;
+
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+
+}
+
+#verbsBtn,
+#nativeLabBtn,
+#armyEnglishBtn,
+#checkBtn,
+#resetBtn,
+#prevBtn,
+#nextBtn{
+
+    background:#0284c7;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 22px;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+#checkBtn:hover,
+#resetBtn:hover,
+#prevBtn:hover,
+#nextBtn:hover{
+
+    transform:translateY(-2px);
+
+    background:#0369a1;
+
+}
+
+/* ===========================
+   TABLA
+=========================== */
+
+.practice-table{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:15px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.18);
+
+    overflow-x:auto;
+
+}
+
+.practice-container {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+    width: 100%;
+
+}
+
+/* Encabezado */
+
+.table-header{
+
+    display:grid;
+
+    grid-template-columns:
+    100px
+    120px
+    120px
+    120px
+    1fr;
+
+    gap:10px;
+
+    background:#38bdf8;
+
+    color:white;
+
+    font-weight:bold;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    margin-bottom:8px;
+
+}
+
+/* Cada fila */
+
+.verb-row{
+
+    display:grid;
+
+    grid-template-columns:
+   
+    max-content
+    max-content
+    max-content
+    max-content;
+
+    gap:8px;
+
+    width:max-content;
+
+    align-items:center;
+
+    padding:7px 0;
+
+    border-bottom:1px solid #d9e7ef;
+
+}
+
+/* Español */
+
+.verb-row > div:first-child{
+
+    font-weight:bold;
+
+    color:#0f3d5e;
+
+}
+
+/* Campo + respuesta */
+
+.answer-box{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+/* Campos */
+
+.answer-box input{
+
+    width:80px;
+
+    height:30px;
+
+    border:2px solid #38bdf8;
+
+    border-radius:8px;
+
+    text-align:center;
+
+    font-size:14px;
+
+    outline:none;
+
+    transition:.2s;
+
+}
+
+.answer-box input:focus{
+
+    border-color:#0284c7;
+
+    box-shadow:0 0 6px rgba(3,105,161,.35);
+
+}
+
+/* Aquí aparecerá:
+   ✅
+   ❌
+   o la respuesta correcta */
+
+ .answer-box span{
+
+    min-width:45px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    color:#16a34a;
+
+}
+
+.answer-box span.wrong{
+
+    color:#dc2626;
+
+}
+
+
+.answer-box span.correct{
+
+    color:#16a34a;
+
+}
+
+
+/* Ejemplo */
+
+.example{
+
+    font-size:14px;
+
+    color:#334155;
+
+}
+
+/* ===========================
+   TELÉFONO
+=========================== */
+
+.verb-block {
+
+    background:white;
+
+    padding:15px;
+
+    border-radius:18px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+
+}
+
+@media(max-width:900px){
+
+    .practice-container {
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .table-header,
+    .verb-row{
+
+        min-width:500px;
+
+    }
+
+
+    body{
+
+        padding:10px;
+
+    }
+
+}
+
+.block-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:12px;
+
+}
+
+.audio-btn{
+
+    border:none;
+
+    background:none;
+
+    font-size:12px;
+
+    cursor:pointer;
+
+    padding:0;
+
+    margin-left:5px;
+
+}
+
+.audio-btn:hover{
+
+    transform:scale(1.2);
+
+}
+
+.verb-example{
+
+    font-size:11px;
+
+    color:#64748b;
+
+    font-style:italic;
+
+    margin-left:10px;
+
+    white-space:nowrap;
+
+}
+
+.native-title{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+}
+
+
+.native-textarea{
+
+    width:100%;
+
+    min-height:70px;
+
+    border:2px solid #4a90e2;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    font-size:16px;
+
+    resize:vertical;
+
+    box-sizing:border-box;
+
+}
+
+.wrong-word{
+
+    color:red;
+
+    font-weight:bold;
+
+}
+
+
+.native-error{
+
+    text-decoration-line: line-through;
+
+    text-decoration-color:red;
+
+    text-decoration-thickness:3px;
+
+}
