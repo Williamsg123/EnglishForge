@@ -30,39 +30,53 @@
         EnglishForge
     </div>
 
-
-    <div class="controls">
-
-        <span id="counter">
-            1-20 / 300
-        </span>
+    <div class="module-controls">
 
         <button id="verbsBtn">
-          VERBS
-       </button>
+            VERBS
+        </button>
 
-        <button id="nativeLabBtn">NATIVE LAB</button>
+        <button id="nativeLabBtn">
+            NATIVE LAB
+        </button>
 
-        <button id="armyEnglishBtn">ARMY ENGLISH</button>
+        <button id="armyEnglishBtn">
+            MIL. ENGLISH
+        </button>
 
+    </div>
+
+    <div class="execution-controls">
+
+        <button id="prevBtn">
+            PREVIOUS
+        </button>
 
         <button id="checkBtn">
             CHECK
         </button>
 
         <button id="resetBtn">
-    RESET
-</button>
+            RESET
+        </button>
+
+        <button id="nextBtn">
+            NEXT
+        </button>
 
     </div>
+
+</div>
 
 
 </header>
 
 
 
-<div id="nativeLabContainer" style="display:none;">
-
+<div
+    id="nativeLabContainer"
+    class="native-lab-container"
+    style="display:none;">
 </div>
 
 <div id="armyContainer" style="display:none;">
@@ -73,35 +87,48 @@
 <main class="practice-container">
 
 
+<div class="verbs-main-header">
 
-<!-- VERBS 1 - 10 -->
+
+    <div class="header-left">
+        <div>Spanish</div>
+        <div>Verb</div>
+        <div>Past</div>
+        <div>Past Part.</div>
+    </div>
+
+    <div class="header-counter" id="verbsPageTitle">
+        VERBS 1 OF 500
+    </div>
+
+    <div class="header-right">
+        <div>Spanish</div>
+        <div>Verb</div>
+        <div>Past</div>
+        <div>Past Part.</div>
+    </div>
+
+</div>
 
 <section class="verb-block" id="block-one">
 
+
 <div class="block-title">
 
-<h3 id="titleOne">
-    VERBS 1 - 10
-</h3>
+        
 
-   <button id="prevBtn">
-        PREVIOUS
-    </button>
+     <h3 id="titleOne"></h3>
 
 </div>
 
 <div class="table-header">
 
-    <div>ESP</div>
-    <div>VERB</div>
-    <div>PAST</div>
-    <div>PP</div>
 
 </div>
 
+<div class="verb-rows-container">
 
-
-<div class="verb-row">
+<div class="verb-row first-verb-row">
 
     <div class="verb-name"></div>
 
@@ -330,6 +357,53 @@
 
 </div>
 
+<div class="verb-row"> 
+
+
+<div class="verb-name"></div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+</div>
+
+
+
+<div class="verb-row"> 
+
+<div class="verb-name"></div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+</div> 
+</div>
+
+
 </section>
 
 
@@ -344,28 +418,18 @@
 
 <div class="block-title">
 
-<h3 id="titleTwo">
-    VERBS 11 - 20
-</h3>
-
-<button id="nextBtn">
-        NEXT
-    </button>
+     <h3 id="titleTwo"></h3>
 
 </div>
 
 <div class="table-header">
 
-    <div>ESP</div>
-    <div>VERB</div>
-    <div>PAST</div>
-    <div>PP</div>
 
 </div>
 
+<div class="verb-rows-container"> 
 
-
-<div class="verb-row">
+<div class="verb-row first-verb-row">
 
     <div class="verb-name"></div>
 
@@ -581,12 +645,63 @@
         <input>
         <span></span>
     </div>
+
+</div>
+
+<div class="verb-row">  
+
+<div class="verb-name"></div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+</div>
+
+<div class="verb-row">  
+
+<div class="verb-name"></div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+<div class="answer-box">
+    <input>
+    <span></span>
+</div>
+
+</div>
 
 </div>
 
 
 </section>
 
+<!-- ===========================
+     NATIVE LAB
+=========================== -->
+
+<section id="nativeLabContainer" class="native-lab-container">
+
+</section>
 
 
 </main>

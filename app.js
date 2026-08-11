@@ -52,6 +52,8 @@ const blockTwo = document.getElementById("block-two");
 const titleOne = document.getElementById("titleOne");
 const titleTwo = document.getElementById("titleTwo");
 
+const verbsPageTitle = document.getElementById("verbsPageTitle");
+
 const practiceContainer = document.querySelector(".practice-container");
 
 const nativeLabContainer = document.getElementById("nativeLabContainer");
@@ -60,13 +62,20 @@ const armyContainer = document.getElementById("armyContainer");
 
 function showVerbs(){
 
-     currentModule = "verbs";
+    currentModule = "verbs";
 
     practiceContainer.style.display = "grid";
 
     nativeLabContainer.style.display = "none";
 
     armyContainer.style.display = "none";
+
+
+    verbsButton.classList.add("active");
+
+    nativeLabButton.classList.remove("active");
+
+    armyEnglishButton.classList.remove("active");
 
 }
 
@@ -78,18 +87,29 @@ function showNativeLab(){
 
     practiceContainer.style.display = "none";
 
-    nativeLabContainer.style.display = "block";
+    nativeLabContainer.style.display = "grid";
 
     armyContainer.style.display = "none";
 
-     loadNativeLab();
+
+    verbsButton.classList.remove("active");
+
+    nativeLabButton.classList.add("active");
+
+    armyEnglishButton.classList.remove("active");
+
+
+    nativePage = 0;
+
+loadNativeLab();
+
 }
 
 
 
 function showArmy(){
 
-     currentModule = "army";
+    currentModule = "army";
 
     practiceContainer.style.display = "none";
 
@@ -97,275 +117,462 @@ function showArmy(){
 
     armyContainer.style.display = "block";
 
+
+    verbsButton.classList.remove("active");
+
+    nativeLabButton.classList.remove("active");
+
+    armyEnglishButton.classList.add("active");
+
+
+    armyContainer.innerHTML = `
+        <div class="army-coming-soon">
+            Being Developed.
+        </div>
+    `;
+
 }
+
+/* ===========================
+   NATIVE LAB V2
+=========================== */
+
+let nativePage = 0;
+
+const nativePerPage = 10;
+
+
+/* ===========================
+   CARGAR PAGINA
+=========================== */
 
 function loadNativeLab(){
 
-let html = `
+    const container =
+        document.getElementById("nativeLabContainer");
 
-<h3>
-NATIVE LAB 1 / ${nativeLab.length}
-</h3>
-
-`;
+    if(!container) return;
 
 
-nativeLab.forEach((item)=>{
-
-html += `
-
-<div class="native-card">
+    const start =
+        nativePage * nativePerPage;
 
 
-<h2 class="native-title">
-
-${item.title}
-
-<button class="audio-btn" onclick="speak(\`${item.paragraph}\`)">
-
-🔊
-
-</button>
-
-</h2>
+    const pageItems =
+        nativeLab.slice(
+            start,
+            start + nativePerPage
+        );
 
 
-<div
-id="nativeAnswer"
-class="native-textarea"
-contenteditable="true">
-
-Write your paragraph here...
-
-</div>
-
-
-</div>
-
-`;
-
-});
-
-
-nativeLabContainer.innerHTML = html;
-
-
-}
-
-
-function checkNativeLab(){
-
-   const answer = document
-    .getElementById("nativeAnswer")
-    .innerText
-    .trim();
-
-
-    const original = nativeLab[0].paragraph;
-
-
-
-    let status;
-
-
-    if(compareNativeText(answer, original)){
-
-    status = `
-        <h3 class="correct">
-            Correct ✅
-        </h3>
+    let leftColumn = `
+        <div class="native-column">
     `;
 
 
-    } else {
+    let rightColumn = `
+        <div class="native-column">
+    `;
 
-        status = `
-            <h3 class="wrong">
-                Check your paragraph ⚠️
-            </h3>
+
+    pageItems.forEach((item, index)=>{
+
+        const globalIndex =
+            start + index;
+
+
+        const card = `
+
+            <div class="native-card">
+
+                <div class="native-header">
+
+                    <div class="native-title">
+
+    <span>
+        ${item.title}:
+    </span>
+
+    <span
+        class="native-original"
+        id="nativeOriginal-${globalIndex}">
+    </span>
+
+</div>
+
+                    <button
+                        class="native-audio"
+                        onclick="playNativeAudio(${globalIndex})">
+
+                        🔊
+
+                    </button>
+
+                </div>
+
+
+                <textarea
+                    class="native-writing-box"
+                    id="nativeAnswer-${globalIndex}"
+                    placeholder="Listen and write the paragraph...">
+                </textarea>
+
+
+            </div>
+
         `;
 
-    }
 
+        if(index < 5){
 
-
-    const oldResult = document.querySelector(".native-result");
-
-    if(oldResult){
-
-        oldResult.remove();
-
-    }
-
-
-
-    const result = document.createElement("div");
-
-    result.classList.add("native-result");
-
-
-  result.innerHTML = `
-
-${status}
-
-
-<h3>
-Original text:
-</h3>
-
-
-<p class="original-text">
-${original}
-</p>
-
-`;
-
-document.getElementById("nativeAnswer").innerHTML =
-highlightNativeErrors(answer, original)
-
-    nativeLabContainer.appendChild(result);
-
-
-    console.log("User wrote:", answer);
-
-
-}
-
-function compareNativeText(userText, originalText){
-
-
-    let cleanUser = userText
-        .toLowerCase()
-        .replace(/[.,!?;:"']/g, "")
-        .trim();
-
-
-    let cleanOriginal = originalText
-        .toLowerCase()
-        .replace(/[.,!?;:"']/g, "")
-        .trim();
-
-
-
-    const replacements = [
-
-        ["got up", "woke up"],
-
-        ["don't", "do not"],
-
-        ["didn't", "did not"],
-
-        ["can't", "cannot"],
-
-        ["won't", "will not"]
-
-    ];
-
-
-
-    replacements.forEach(pair => {
-
-        cleanUser = cleanUser.replace(pair[0], pair[1]);
-
-    });
-
-
-
-    return cleanUser === cleanOriginal;
-
-
-}
-
-function findNativeDifferences(userText, originalText){
-
-    const userWords = userText.split(" ");
-    const originalWords = originalText.split(" ");
-
-    let result = "";
-
-
-    userWords.forEach((word, index)=>{
-
-
-        let originalWord = originalWords[index] || "";
-
-
-        if(
-            word.toLowerCase().replace(/[.,!?]/g,"") !==
-            originalWord.toLowerCase().replace(/[.,!?]/g,"")
-        ){
-
-            result += `
-            <span class="native-error">
-                ${word}
-            </span> `;
+            leftColumn += card;
 
         } else {
 
-            result += word + " ";
+            rightColumn += card;
 
         }
-
 
     });
 
 
-    return result;
+    leftColumn += `
+        </div>
+    `;
+
+
+    rightColumn += `
+        </div>
+    `;
+
+
+   container.innerHTML = `
+
+<div class="native-section-header">
+
+    <div class="native-status-left" id="nativeStatusLeft"></div>
+
+    <div class="native-section-title">
+        LISTENING & WRITING PRACTICE
+    </div>
+
+    <div class="native-status-right" id="nativeStatusRight"></div>
+
+</div>
+
+${leftColumn}
+${rightColumn}
+
+`;
+
+    updateNativeCounter();
+
+    const maxPage =
+    Math.ceil(
+        nativeLab.length /
+        nativePerPage
+    ) - 1;
+
+prevButton.disabled = nativePage === 0;
+
+nextButton.disabled = nativePage === maxPage;
+
 
 }
 
-function markNativeErrors(userText, originalText){
+
+/* ===========================
+   CONTADOR
+=========================== */
+
+function updateNativeCounter(){
+
+    const counter = document.getElementById("counter");
+
+    if(!counter) return;
 
 
-    const userWords = userText.split(" ");
+    const start = nativePage * nativePerPage + 1;
 
-    const originalWords = originalText.split(" ");
-
-
-    let result = "";
-
-
-    userWords.forEach((word, index)=>{
+    const end = Math.min(
+        start + nativePerPage - 1,
+        nativeLab.length
+    );
 
 
-        if(originalWords[index]){
+    counter.textContent =
+        `${start}-${end} / ${nativeLab.length}`;
+
+}
 
 
-            if(
-                word.toLowerCase() !== 
-                originalWords[index].toLowerCase()
-            ){
+/* ===========================
+   CHECK TODOS
+=========================== */
 
-                result += `
-                <span class="error-mark">
-                    ${word}
-                </span> `;
+function checkNativeLab(){
 
-            } 
-            else {
+    const start = nativePage * nativePerPage;
 
-                result += word + " ";
+    const pageItems = nativeLab.slice(
+        start,
+        start + nativePerPage
+    );
+
+
+    const leftErrors = [];
+    const rightErrors = [];
+
+
+    pageItems.forEach((item,index)=>{
+
+        const globalIndex = start + index;
+
+
+        const textarea =
+            document.getElementById(
+                `nativeAnswer-${globalIndex}`
+            );
+
+
+        const originalDisplay =
+            document.getElementById(
+                `nativeOriginal-${globalIndex}`
+            );
+
+
+        if(!textarea) return;
+
+
+        const answer = textarea.value;
+
+        const original = item.paragraph;
+
+
+        originalDisplay.textContent =
+            original;
+
+
+        const correct =
+            compareNativeText(
+                answer,
+                original
+            );
+
+
+        if(!correct){
+
+            if(index < 5){
+
+                leftErrors.push(item.title);
+
+            } else {
+
+                rightErrors.push(item.title);
 
             }
 
 
-        } else {
-
-
-            result += `
-            <span class="error-mark">
-                ${word}
-            </span> `;
-
+            console.log(
+                highlightNativeErrors(
+                    answer,
+                    original
+                )
+            );
 
         }
-
 
     });
 
 
-    return result;
+    const leftStatus =
+        document.getElementById(
+            "nativeStatusLeft"
+        );
 
+
+    const rightStatus =
+        document.getElementById(
+            "nativeStatusRight"
+        );
+
+
+    if(leftStatus){
+
+        if(leftErrors.length === 0){
+
+            leftStatus.textContent =
+                "All paragraphs are correct ✓";
+
+            leftStatus.className =
+                "native-status-left correct";
+
+        } else {
+
+            leftStatus.textContent =
+                "Review: " +
+                leftErrors.join(", ");
+
+            leftStatus.className =
+                "native-status-left wrong";
+
+        }
+
+    }
+
+
+    if(rightStatus){
+
+        if(rightErrors.length === 0){
+
+            rightStatus.textContent =
+                "All paragraphs are correct ✓";
+
+            rightStatus.className =
+                "native-status-right correct";
+
+        } else {
+
+            rightStatus.textContent =
+                "Review: " +
+                rightErrors.join(", ");
+
+            rightStatus.className =
+                "native-status-right wrong";
+
+        }
+
+    }
+
+}
+
+
+/* ===========================
+   COMPARAR TEXTO
+=========================== */
+
+function compareNativeText(
+    userText,
+    originalText
+){
+
+    const cleanUser =
+        userText
+            .toLowerCase()
+            .trim();
+
+
+    const cleanOriginal =
+        originalText
+            .toLowerCase()
+            .trim();
+
+
+    return cleanUser === cleanOriginal;
+
+}
+
+
+/* ===========================
+   AUDIO
+=========================== */
+
+function playNativeAudio(index){
+
+    const item =
+        nativeLab[index];
+
+
+    if(!item) return;
+
+
+    const speech =
+        new SpeechSynthesisUtterance(
+            item.paragraph
+        );
+
+
+    speech.lang = "en-US";
+
+    speech.rate = 0.9;
+
+    speech.pitch = 1;
+
+
+    window.speechSynthesis.cancel();
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+/* ===========================
+   SIGUIENTE PAGINA
+=========================== */
+
+function nextNativePage(){
+
+    const maxPage =
+        Math.ceil(
+            nativeLab.length /
+            nativePerPage
+        ) - 1;
+
+
+    if(nativePage < maxPage){
+
+        nativePage++;
+
+        loadNativeLab();
+
+    }
+
+}
+
+
+/* ===========================
+   PAGINA ANTERIOR
+=========================== */
+
+function previousNativePage(){
+
+    if(nativePage > 0){
+
+        nativePage--;
+
+        loadNativeLab();
+
+    }
+
+}
+
+/* ===========================
+   CORRECCION DE ERRORES
+=========================== */
+
+function highlightNativeErrors(
+    userText,
+    originalText
+){
+
+    /*
+     * Esta función será reemplazada
+     * por el comparador avanzado.
+     *
+     * Aquí vamos a detectar:
+     *
+     * - espacios extras
+     * - espacios faltantes
+     * - letras
+     * - palabras
+     * - comas
+     * - puntos
+     * - signos
+     */
+
+    return userText;
 
 }
 
@@ -434,7 +641,7 @@ rowsOne.forEach((row, index) => {
 
 
 rowsTwo.forEach((row, index) => {
-    row.dataset.id = index + 11;
+    row.dataset.id = index + 13;
 });
 
 console.log("Filas bloque 1:", rowsOne.length);
@@ -464,7 +671,7 @@ function formatText(text){
 }
 function loadVerbsPage(){
 
-    let start = (currentPage - 1) * 20;
+    let start = (currentPage - 1) * 24;
 
 
     rowsOne.forEach((row)=>{
@@ -499,7 +706,7 @@ rowsTwo.forEach((row)=>{
 });
 
 
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 12; i++){
 
    rowsOne[i].querySelector(".verb-name").textContent =
    formatText(verbs[start + i].spanish);
@@ -509,36 +716,47 @@ rowsTwo.forEach((row)=>{
 }
 
 
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 12; i++){
 
     rowsTwo[i].querySelector(".verb-name").textContent =
-    formatText(verbs[start + 10 + i].spanish);
+    formatText(verbs[start + 12 + i].spanish);
 
-    addAudioButton(rowsTwo[i], verbs[start + 10 + i]);
+    addAudioButton(rowsTwo[i], verbs[start + 12 + i]);
 
 }
 
-    titleOne.textContent = 
-`VERBS ${start + 1} - ${start + 10}`;
+   titleOne.textContent = "";
 
+titleTwo.textContent = "";
 
-titleTwo.textContent = 
-`VERBS ${start + 11} - ${start + 20}`;
+verbsPageTitle.textContent =
+`VERBS ${Math.min(start + 24, verbs.length)} OF ${verbs.length}`;
 
     console.log("Página cargada:", currentPage);
 
     prevButton.disabled = currentPage === 1;
 
-nextButton.disabled = currentPage === Math.ceil(verbs.length / 20);
+nextButton.disabled = currentPage === Math.ceil(verbs.length / 24);
 
 }
 
 
 loadVerbsPage();
 
+showVerbs();
+
 nextButton.addEventListener("click", () => {
 
-    if(currentPage < Math.ceil(verbs.length / 20)){
+    if(currentModule === "native"){
+
+        nextNativePage();
+
+        return;
+
+    }
+
+
+    if(currentPage < Math.ceil(verbs.length / 24)){
 
         currentPage++;
 
@@ -550,6 +768,17 @@ nextButton.addEventListener("click", () => {
 
 
 prevButton.addEventListener("click", () => {
+
+console.log("CURRENT MODULE:", currentModule);
+
+    if(currentModule === "native"){
+
+        previousNativePage();
+
+        return;
+
+    }
+
 
     if(currentPage > 1){
 
@@ -680,7 +909,7 @@ checkButton.addEventListener("click", () => {
 console.log("Filas bloque 2:", rowsTwo.length);
 console.log("Página:", currentPage);
 
-    let start = (currentPage - 1) * 20;
+    let start = (currentPage - 1) * 24;
 
     console.log("Página actual:", currentPage);
 console.log("Inicio:", start);
@@ -696,7 +925,7 @@ console.log("Verbo que debería revisar:", verbs[start]);
 
     rowsTwo.forEach((row, index) => {
 
-    checkRow(row, verbs[start + 10 + index]);
+    checkRow(row, verbs[start + 12 + index]);
 
 
 
@@ -707,10 +936,30 @@ console.log("Verbo que debería revisar:", verbs[start]);
 
 resetButton.addEventListener("click", () => {
 
+    if(currentModule === "native"){
 
-    const allInputs = document.querySelectorAll("input");
+        nativePage = 0;
 
-    const allSpans = document.querySelectorAll(".answer-box span");
+        loadNativeLab();
+
+        return;
+
+    }
+
+
+    nativePage = 0;
+
+    currentPage = 1;
+
+    loadVerbsPage();
+
+    const allInputs =
+        document.querySelectorAll("input");
+
+    const allSpans =
+        document.querySelectorAll(
+            ".answer-box span"
+        );
 
 
     allInputs.forEach(input => {
@@ -731,9 +980,6 @@ resetButton.addEventListener("click", () => {
         span.classList.remove("correct");
 
     });
-
-
-    console.log("RESET COMPLETO");
 
 
 });
